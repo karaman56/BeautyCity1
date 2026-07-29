@@ -1,0 +1,26 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: 132.243.121.192
+          username: root
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd /var/www/beauty
+            git pull origin main
+            source .venv/bin/activate
+            pip install -r requirements.txt --quiet
+            python manage.py collectstatic --noinput
+            python manage.py migrate --noinput
+            systemctl restart beauty

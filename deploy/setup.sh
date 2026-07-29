@@ -32,14 +32,6 @@ if [ ! -f ".env" ]; then
 DJANGO_SECRET_KEY=CHANGE_ME_TO_RANDOM_SECRET
 DJANGO_DEBUG=False
 DJANGO_ALLOWED_HOSTS=beauty.kislyakov.pro,localhost
-YANDEX_MAPS_API_KEY=
-VK_APP_ID=
-VK_APP_SECRET=
-VK_REDIRECT_URI=https://beauty.kislyakov.pro/accounts/vk/callback/
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_HOST_USER=
-EMAIL_HOST_PASSWORD=
 ENVEOF
     echo ".env created — edit it with real values!"
 fi
