@@ -9,7 +9,7 @@ Group=root
 WorkingDirectory=/var/www/beauty
 EnvironmentFile=/var/www/beauty/.env
 ExecStart=/var/www/beauty/.venv/bin/gunicorn beauty_city.wsgi:application \
-    --bind 127.0.0.1:8000 \
+    --bind 127.0.0.1:8001 \
     --workers 3 \
     --timeout 120 \
     --access-logfile /var/log/beauty/access.log \
