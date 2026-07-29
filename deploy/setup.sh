@@ -6,7 +6,7 @@ REPO_URL="git@github.com:skislyakow/BeautyCity.git"
 
 echo "=== 1. System packages ==="
 apt update
-apt install -y python3.11 python3.11-venv python3.11-dev nginx redis-server certbot python3-certbot-nginx git
+apt install -y python3.11 python3.11-venv python3.11-dev nginx certbot python3-certbot-nginx git
 
 echo "=== 2. Create project directory ==="
 mkdir -p $PROJECT_DIR
@@ -40,7 +40,6 @@ EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
 EMAIL_HOST_USER=
 EMAIL_HOST_PASSWORD=
-REDIS_URL=redis://localhost:6379/0
 ENVEOF
     echo ".env created — edit it with real values!"
 fi
@@ -52,12 +51,8 @@ python manage.py migrate --noinput
 
 echo "=== 7. Copy systemd services ==="
 cp deploy/beauty.service /etc/systemd/system/
-cp deploy/beauty-celery.service /etc/systemd/system/
-cp deploy/beauty-celery-beat.service /etc/systemd/system/
 systemctl daemon-reload
 systemctl enable beauty
-systemctl enable beauty-celery
-systemctl enable beauty-celery-beat
 
 echo "=== 8. Copy nginx config ==="
 cp deploy/beauty.kislyakov.pro /etc/nginx/sites-available/
@@ -67,10 +62,8 @@ nginx -t && systemctl reload nginx
 echo "=== 9. SSL ==="
 certbot --nginx -d beauty.kislyakov.pro --non-interactive --agree-tos -m admin@kislyakov.pro || true
 
-echo "=== 10. Start services ==="
+echo "=== 10. Start service ==="
 systemctl start beauty
-systemctl start beauty-celery
-systemctl start beauty-celery-beat
 
 echo ""
 echo "=== Done! ==="
