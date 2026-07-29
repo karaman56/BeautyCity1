@@ -1,0 +1,23 @@
+[Unit]
+Description=BeautyCity Gunicorn Service
+After=network.target redis.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/var/www/beauty
+EnvironmentFile=/var/www/beauty/.env
+ExecStart=/var/www/beauty/.venv/bin/gunicorn beauty_city.wsgi:application \
+    --bind 127.0.0.1:8000 \
+    --workers 3 \
+    --timeout 120 \
+    --access-logfile /var/log/beauty/access.log \
+    --error-logfile /var/log/beauty/error.log
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
